@@ -1,0 +1,6 @@
+apps:
+  - script: "server.js"
+    name: "Absolute Tally - 3000"
+    watch: false
+    args: "--prod"
+    exec_mode: "cluster"
