@@ -4,7 +4,7 @@ async = require('async');
 // var collection = db.collection('invoice')
 
 exports.updateTally = function (req, res) {
-
+    console.log("req.body.result", req.body.result)
     var reqArray = req.body.result;
     var successInvoice = [];
     var failureInvoice = [];
