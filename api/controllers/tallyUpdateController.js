@@ -35,7 +35,7 @@ exports.updateTally = function (req, res) {
                     }, {
                             $set: {
                                 isTallySuccess: true,
-                                failureReason: null
+                                failureReason: 'null'
                             }
                         }, {
                             multi: true
