@@ -57,28 +57,41 @@ exports.updateTally = function (req, res) {
                 },
                 errorUpdate: function (outerCB) {
                     async.eachSeries(failureInvoice, function (n, cb) {
-                        db.collection('invoices').update({
-                            invoiceNumber: n.invoiceNumber
-                        }, {
+                        var queryString = {};
+                        if (n.failureReason == "Voucher Number '" + n.invoiceNumber + "' already exists!") {
+                            queryString = {
+                                $set: {
+                                    isTallySuccess: false,
+                                    failureReason: n.failureReason,
+                                    isAlreadyExistInTally: true
+                                }
+                            }
+                        } else {
+                            queryString = {
                                 $set: {
                                     isTallySuccess: false,
                                     failureReason: n.failureReason
                                 }
-                            }, function (error, invoiceUpdated) {
-                                if (error) {
-                                    cb(error, null);
+                            }
+                        }
+
+                        db.collection('invoices').update({
+                            invoiceNumber: n.invoiceNumber
+                        }, queryString, function (error, invoiceUpdated) {
+                            if (error) {
+                                cb(error, null);
+                            } else {
+                                if (invoiceUpdated.nModified > 0) {
+                                    cb(null, {
+                                        message: "Invoice updated"
+                                    });
                                 } else {
-                                    if (invoiceUpdated.nModified > 0) {
-                                        cb(null, {
-                                            message: "Invoice updated"
-                                        });
-                                    } else {
-                                        cb(null, {
-                                            message: "Invoices not updated"
-                                        });
-                                    }
+                                    cb(null, {
+                                        message: "Invoices not updated"
+                                    });
                                 }
-                            });
+                            }
+                        });
                     }, function (err) {
                         if (err) {
                             outerCB(err, null);
