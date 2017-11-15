@@ -70,7 +70,8 @@ exports.updateTally = function (req, res) {
                             queryString = {
                                 $set: {
                                     isTallySuccess: false,
-                                    failureReason: n.failureReason
+                                    failureReason: n.failureReason,
+                                    isAlreadyExistInTally: false
                                 }
                             }
                         }
