@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Tally = mongoose.model('Tally');
-async = require('async');
+var _ = require('lodash');
+var async = require('async');
 // var collection = db.collection('invoice')
 
 exports.updateTally = function (req, res) {
@@ -102,6 +103,41 @@ exports.updateTally = function (req, res) {
                             });
                         }
                     })
+                },
+                //To store tally import status of invoice 
+                saveStatus: function (cb) {
+                    async.parallel({
+                        storeSuccessInovice: function (innerCB) {
+                            if (!_.isEmpty(successInvoice)) {
+                                async.eachSeries(successInvoice, function (n, cb1) {
+                                    var obj = {
+                                        invoiceNumber: n,
+                                        failureReason: null,
+                                        tallyImportStatus: "true",
+                                        importDate: new Date()
+                                    }
+                                    db.collection('tallydailyreports').insertOne(obj, cb1);
+                                }, innerCB)
+                            } else {
+                                innerCB();
+                            }
+                        },
+                        saveFailedInvoice: function (innerCB) {
+                            if (!_.isEmpty(failureInvoice)) {
+                                async.eachSeries(failureInvoice, function (n, cb1) {
+                                    var obj = {
+                                        invoiceNumber: n.invoiceNumber,
+                                        failureReason: n.failureReason,
+                                        tallyImportStatus: "false",
+                                        importDate: new Date()
+                                    }
+                                    db.collection('tallydailyreports').insertOne(obj, cb1);
+                                }, innerCB)
+                            } else {
+                                innerCB();
+                            }
+                        }
+                    }, cb)
                 }
             }, function () {
                 var resObj = {};
