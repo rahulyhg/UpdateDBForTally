@@ -13,6 +13,7 @@
     "express": "~4.15.2",
     "express-xml-bodyparser": "^0.3.0",
     "lodash": "^4.17.4",
+    "moment": "^2.19.3",
     "mongodb": "^2.2.31",
     "mongoose": "^4.11.11",
     "morgan": "~1.8.1",

@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
     Tally = mongoose.model('Tally');
 var _ = require('lodash');
 var async = require('async');
+var moment = require('moment');
 // var collection = db.collection('invoice')
 
 exports.updateTally = function (req, res) {
@@ -114,7 +115,7 @@ exports.updateTally = function (req, res) {
                                         invoiceNumber: n,
                                         failureReason: null,
                                         tallyImportStatus: "true",
-                                        importDate: new Date()
+                                        importDate: moment().format("D/M/YYYY")
                                     }
                                     db.collection('tallydailyreports').insertOne(obj, cb1);
                                 }, innerCB)
@@ -129,7 +130,7 @@ exports.updateTally = function (req, res) {
                                         invoiceNumber: n.invoiceNumber,
                                         failureReason: n.failureReason,
                                         tallyImportStatus: "false",
-                                        importDate: new Date()
+                                        importDate: moment().format("D/M/YYYY")
                                     }
                                     db.collection('tallydailyreports').insertOne(obj, cb1);
                                 }, innerCB)
