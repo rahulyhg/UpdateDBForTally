@@ -29,7 +29,7 @@ var MongoClient = require('mongodb').MongoClient
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 // global["db"] = mongoose.connect('mongodb://localhost/absolute');
-MongoClient.connect('mongodb://localhost:27017/absolute', function (err, db) {
+MongoClient.connect('mongodb://absolute:absolute123@mumbai-shard-00-00-71cj9.gcp.mongodb.net:27017,mumbai-shard-00-01-71cj9.gcp.mongodb.net:27017,mumbai-shard-00-02-71cj9.gcp.mongodb.net:27017/absolute?authSource=admin&replicaSet=mumbai-shard-0&ssl=true', function (err, db) {
     if (err) throw err;
 
     global["db"] = db;
